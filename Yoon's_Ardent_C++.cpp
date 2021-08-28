@@ -3,6 +3,7 @@
 
 //Project 1 : 계좌 관리 프로그램
 //Project 2 : Class 추가
+//Project 3 : 복사 생성자 -> 깊은 복사
 
 #include <iostream>
 #include <cstring>
@@ -39,6 +40,14 @@ public:
         cusName = new char[strlen(name) + 1];
         strcpy_s(cusName, strlen(name), name);
  
+    }
+
+    Account(const Account& ref) // 깊은 복사 생성자 : 원본 생성자 포인터 소멸시 복사 생성자는 포인터 주소만 참조해 사용하기 때문에 오류 발생 -> 깊은 복사 생성자를 사용하여 오류 해결
+        : accID(ref.accID), balance(ref.balance) 
+    {
+        cusName = new char[strlen(ref.cusName) + 1];
+        strcpy_s(cusName, strlen(ref.cusName), ref.cusName);
+
     }
 
     int GetAccID() { return accID; }
