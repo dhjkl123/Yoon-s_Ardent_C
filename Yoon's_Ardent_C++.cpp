@@ -1,11 +1,23 @@
 ﻿// Yoon's_Ardent_C++.cpp : 이 파일에는 'main' 함수가 포함됩니다. 거기서 프로그램 실행이 시작되고 종료됩니다.
 //
 
+//Project 1 : 계좌 관리 프로그램
+//Project 2 : Class 추가
+
 #include <iostream>
 #include <cstring>
 
 using namespace std;
 #define NAME_LEN  20
+
+enum {MAKE = 1, DEPOSIT, WITHDRAW, INQUIRE, EXIT};
+
+//typedef struct
+//{
+//    int accID;
+//    int balance;
+//    char cusName[NAME_LEN];
+//} Account;
 
 void ShowMenu();        //메뉴입력
 void MakeAccount();     //계좌개설
@@ -13,16 +25,52 @@ void DepositMoney();    //입금
 void WitharawMoney();   //출금
 void ShowAllAccInfo();  //잔액조회
 
-enum {MAKE = 1, DEPOSIT, WITHDRAW, INQUIRE, EXIT};
-
-typedef struct
+class Account
 {
+private:
     int accID;
     int balance;
-    char cusName[NAME_LEN];
-} Account;
+    char* cusName;
 
-Account _accArr[100]; // 계좌 저장 배열
+public:
+    Account(int ID, int money, char* name)
+        : accID(ID), balance(money) // 멤버 이니셜라이저 // 초기화 대상 명확히 인식 // 성능 이점 -> 선언과 동시에 초기화가 이루어지는 바이너리 코드 생성
+    {
+        cusName = new char[strlen(name) + 1];
+        strcpy_s(cusName, strlen(name), name);
+ 
+    }
+
+    int GetAccID() { return accID; }
+    void Deposit(int money)
+    {
+        balance += money;
+
+    }
+    int Withdraw(int money)
+    {
+        if (balance < money)
+            return 0;
+
+        balance -= money;
+        return money;
+    }
+
+    void ShowAccInfo()
+    {
+        cout << "계좌ID : " << accID << endl;
+        cout << "이  름 : " << cusName << endl;
+        cout << "잔  액 : " << balance << endl;
+    }
+
+    ~Account()
+    {
+        delete[]cusName;
+    }
+};
+
+
+Account* _accArr[100]; // 계좌 저장 배열
 int _naccNum = 0;   // 계좌 저장 개수
 
 int main()
@@ -50,6 +98,8 @@ int main()
             ShowAllAccInfo();
             break;
         case EXIT:
+            for (int i = 0; i < _naccNum; i++)
+                delete _accArr[i];
             return 0;
             break;
         default :
@@ -59,6 +109,7 @@ int main()
     }
     return 0;
 }
+
 
 void ShowMenu()
 {
@@ -83,10 +134,7 @@ void MakeAccount()
     cout << "입금액 :"; cin >> nBal;
     cout << endl; cout << endl;
 
-    _accArr[_naccNum].accID = nId;
-    _accArr[_naccNum].balance = nBal;
-    strcpy_s(_accArr[_naccNum].cusName , szName);
-    _naccNum++;
+    _accArr[_naccNum++] = new Account(nId, nBal, szName);
 }
 
 void DepositMoney()
@@ -99,9 +147,9 @@ void DepositMoney()
 
     for (int i = 0; i < _naccNum; i++)
     {
-        if (_accArr[i].accID == nId)
+        if (_accArr[i]->GetAccID() == nId)
         {
-            _accArr[i].balance += nMoney;
+            _accArr[i]->Deposit(nMoney);
             cout << "입금완료" << endl;
             return;
 
@@ -121,14 +169,14 @@ void WitharawMoney()
 
     for (int i = 0; i < _naccNum; i++)
     {
-        if (_accArr[i].accID == id)
+        if (_accArr[i]->GetAccID() == id)
         {
-            if (_accArr[i].balance < money)
+            if (_accArr[i]->Withdraw(money) == 0 )
             {
                 cout << "잔액 부족" << endl;
                 return;
             }
-            _accArr[i].balance -= money;
+         
             cout << "출금완료" << endl;
             return;
 
@@ -143,10 +191,9 @@ void ShowAllAccInfo()
     for (int i = 0; i < _naccNum; i++)
     {
         cout << "===================" << endl;
-        cout << "계좌ID : " << _accArr[i].accID << endl;
-        cout << "이  름 : " << _accArr[i].cusName << endl;
-        cout << "잔  액 : " << _accArr[i].balance << endl;
+        _accArr[i]->ShowAccInfo();
     }
     cout << "===================" << endl;
     cout << endl;
 }
+
