@@ -4,6 +4,7 @@
 //Project 1 : 계좌 관리 프로그램
 //Project 2 : Class 추가
 //Project 3 : 복사 생성자 -> 깊은 복사
+//Project 4 : 멤버 함수 const
 
 #include <iostream>
 #include <cstring>
@@ -50,7 +51,7 @@ public:
 
     }
 
-    int GetAccID() { return accID; }
+    int GetAccID() const { return accID; }
     void Deposit(int money)
     {
         balance += money;
@@ -65,7 +66,7 @@ public:
         return money;
     }
 
-    void ShowAccInfo()
+    void ShowAccInfo() const // const 객체를 통해 호출시 const 멤버 함수를 호출
     {
         cout << "계좌ID : " << accID << endl;
         cout << "이  름 : " << cusName << endl;
