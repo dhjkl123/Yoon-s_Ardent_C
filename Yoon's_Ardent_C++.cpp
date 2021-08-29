@@ -6,6 +6,7 @@
 //Project 3 : 복사 생성자 -> 깊은 복사
 //Project 4 : 멤버 함수 const
 //Project 5 : Control Class, Entity Class
+//Project 6 : Class 상속
 
 #include <iostream>
 #include <cstring>
@@ -16,7 +17,9 @@
 using namespace std;
 #define NAME_LEN  20
 
+//메뉴선택
 enum {MAKE = 1, DEPOSIT, WITHDRAW, INQUIRE, EXIT};
+
 
 Account* _accArr[100]; // 계좌 저장 배열
 int _naccNum = 0;   // 계좌 저장 개수

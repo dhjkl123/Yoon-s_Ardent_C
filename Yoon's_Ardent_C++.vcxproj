@@ -141,11 +141,15 @@
   <ItemGroup>
     <ClCompile Include="Account.cpp" />
     <ClCompile Include="AccountHandler.cpp" />
+    <ClCompile Include="HighCreditAccount.cpp" />
+    <ClCompile Include="NomalAccount.cpp" />
     <ClCompile Include="Yoon%27s_Ardent_C++.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Account.h" />
     <ClInclude Include="AccountHandler.h" />
+    <ClInclude Include="HighCreditAccount.h" />
+    <ClInclude Include="NomalAccount.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

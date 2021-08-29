@@ -3,8 +3,17 @@
 #include <iostream>
 #include <cstring>
 
+#include "HighCreditAccount.h"
+#include "NomalAccount.h"
+
 using namespace std;
 #define NAME_LEN  20
+
+//계좌의 종류
+enum { NOMAL = 1, CREDIT = 2 };
+
+//신용등급
+enum { LEVEL_A = 7, LEVEL_B = 4, LEVEL_C = 2 };
 
 AccountHandler::AccountHandler() :m_accNum(0) {}
 
@@ -33,13 +42,53 @@ void AccountHandler::MakeAccount()
     char szName[NAME_LEN];
     int nBal;
 
+    int nInterRate;
+    int sel;
+    int nLevel;
+
     cout << "[계좌개설]" << endl;
-    cout << "계좌ID : "; cin >> nId;
-    cout << "이  름 :"; cin >> szName;
-    cout << "입금액 :"; cin >> nBal;
+    cout << "1. 보통예금계좌" << endl;
+    cout << "2. 신용신뢰계좌" << endl;
+    cout << "선택  : "; cin >> sel;
+
+    if (sel == NOMAL)
+    {
+        cout << "[보통예금계좌개설]" << endl;
+        cout << "계좌ID : "; cin >> nId;
+        cout << "이  름 :"; cin >> szName;
+        cout << "입금액 :"; cin >> nBal;
+        cout << "이자율 :"; cin >> nInterRate;
+        
+        m_accArr[m_accNum++] = new NomalAccount(nId, nBal, szName, nInterRate);
+    }
+    else
+    {
+        cout << "[신용신뢰계좌개설]" << endl;
+        cout << "계좌ID : "; cin >> nId;
+        cout << "이  름 :"; cin >> szName;
+        cout << "입금액 :"; cin >> nBal;
+        cout << "이자율 :"; cin >> nInterRate;
+        cout << "신용등급(1:A, 2:B, 3:C) :"; cin >> nLevel;
+
+        switch (nLevel)
+        {
+        case 1:
+            m_accArr[m_accNum++] = new HighCreditAccount(nId, nBal, szName, nInterRate, LEVEL_A);
+            break;
+        case 2:
+            m_accArr[m_accNum++] = new HighCreditAccount(nId, nBal, szName, nInterRate, LEVEL_B);
+            break;
+        case 3:
+            m_accArr[m_accNum++] = new HighCreditAccount(nId, nBal, szName, nInterRate, LEVEL_C);
+            break;
+        }
+        
+        
+    }
+
     cout << endl; cout << endl;
 
-    m_accArr[m_accNum++] = new Account(nId, nBal, szName);
+    
 }
 
 void AccountHandler::DepositMoney()
